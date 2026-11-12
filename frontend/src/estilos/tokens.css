@@ -1,0 +1,40 @@
+/* frontend/src/estilos/tokens.css */
+:root {
+  /* Colores de Marca */
+  --bordo: #6B0F0A;
+  --bordo-hover: #520b07;
+  --blanco: #FFFFFF;
+  --negro: #1A1A1A;
+
+  /* Escala de Grises */
+  --gris-50: #F9FAFB;
+  --gris-100: #F3F4F6;
+  --gris-200: #E5E7EB;
+  --gris-400: #9CA3AF;
+  --gris-600: #4B5563;
+  --gris-900: #111827;
+
+  /* Colores de Estado */
+  --exito: #059669;       /* Verde para operaciones correctas */
+  --alerta: #D97706;      /* Amarillo/Naranja para stock mínimo */
+  --error: #DC2626;       /* Rojo para fallos o errores */
+  --info: #2563EB;        /* Azul informativo */
+
+  /* Tipografía */
+  --fuente-principal: 'Inter', system-ui, -apple-system, sans-serif;
+  --peso-normal: 400;
+  --peso-medio: 500;
+  --peso-negrita: 700;
+
+  /* Espaciados y Radios */
+  --radio-borde: 8px;
+  --sombra-tarjeta: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: var(--fuente-principal);
+  background-color: var(--gris-50);
+  color: var(--gris-900);
+  margin: 0;
+  padding: 0;
+}
