@@ -43,6 +43,9 @@ export const login = async (req, res) => {
 };
 
 export const yo = (req, res) => {
-    // En el Paso 4 vamos a proteger esta ruta y leer el token real. Por ahora dejamos el esqueleto.
-    res.json({ mensaje: 'Datos del usuario logueado (Próximamente)' });
+    // Como pasó por el middleware 'autenticar', req.usuario ya tiene los datos desencriptados
+    res.json({ 
+        mensaje: 'Estás autenticada correctamente', 
+        usuario: req.usuario 
+    });
 };
