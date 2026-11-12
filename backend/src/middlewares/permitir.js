@@ -1,4 +1,3 @@
-// backend/src/middlewares/permitir.js
 export const permitir = (...rolesPermitidos) => {
     return (req, res, next) => {
         // Si no hay usuario, o su rol no está en la lista de permitidos, lo rebotamos
