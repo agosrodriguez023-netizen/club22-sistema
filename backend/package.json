@@ -8,7 +8,7 @@
   "dev": "node --watch src/index.js",
   "start": "node src/index.js",
   "db:preparar": "node db/preparar.js",
-  "test": "node --test tests/"
+  "test": "node --test"
 },
 "dependencies": {
   "express": "^4.21.2",
