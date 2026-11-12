@@ -1,9 +1,10 @@
+import 'dotenv/config';
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from './routes/auth.routes.js';
 import productosRoutes from './routes/productos.routes.js';
-dotenv.config();
+import ventasRoutes from './routes/ventas.routes.js';
+import { errores } from './middlewares/errores.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -15,7 +16,10 @@ app.use(express.json());
 // Conectamos las rutas
 app.use('/api', authRoutes);
 app.use('/api/productos', productosRoutes);
+app.use('/api/ventas', ventasRoutes);
 
+// atrapa los errores de todas las rutas de arriba
+app.use(errores);
 
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
