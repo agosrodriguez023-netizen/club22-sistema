@@ -13,13 +13,13 @@ export const comprobarSalud = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-    console.log("Datos recibidos desde PowerShell:", req.body); 
-    
-    const { nombre, password } = req.body;
-    
     try {
+        const { nombre, password } = req.body ?? {};
+        if (!nombre || !password) {
+            return res.status(400).json({ mensaje: 'Ingresá usuario y contraseña' });
+        }
+
         const usuario = await buscarUsuarioPorNombre(nombre);
-        
         if (!usuario) {
             return res.status(401).json({ mensaje: 'Usuario o contraseña incorrectos' });
         }
@@ -37,8 +37,8 @@ export const login = async (req, res) => {
 
         res.json({ token, usuario: { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol } });
     } catch (error) {
-        // Le mandamos el detalle exacto directo a tu consola
-        res.status(500).json({ mensaje: 'Error interno del servidor', detalle_exacto: error.message });
+        console.error(error);
+        res.status(500).json({ mensaje: 'Error interno del servidor' });
     }
 };
 
