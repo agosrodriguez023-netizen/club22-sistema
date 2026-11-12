@@ -9,5 +9,13 @@
   "start": "node src/index.js",
   "db:preparar": "node db/preparar.js",
   "test": "node --test tests/"
+},
+"dependencies": {
+  "express": "^4.21.2",
+  "pg": "^8.13.1",
+  "bcrypt": "^5.1.1",
+  "jsonwebtoken": "^9.0.2",
+  "cors": "^2.8.5",
+  "dotenv": "^16.4.7"
 }
 }
