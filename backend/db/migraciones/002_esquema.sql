@@ -197,6 +197,16 @@ CREATE TABLE movimiento_stock (
 );
 CREATE INDEX idx_mov_producto ON movimiento_stock (producto_codigo, fecha_hora);
 
+CREATE TABLE IF NOT EXISTS auditoria (
+  id          SERIAL PRIMARY KEY,
+  usuario_id  INTEGER     NOT NULL REFERENCES usuarios(id),
+  accion      VARCHAR(40) NOT NULL,
+  entidad     VARCHAR(30) NOT NULL,
+  entidad_id  INTEGER,
+  antes       JSONB,
+  despues     JSONB,
+  fecha_hora  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
 
 COMMIT;
 
