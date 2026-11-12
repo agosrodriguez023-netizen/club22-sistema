@@ -1,4 +1,3 @@
-// backend/src/middlewares/autenticar.js
 import jwt from 'jsonwebtoken';
 
 export const autenticar = (req, res, next) => {
