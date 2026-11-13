@@ -9,6 +9,7 @@ import PanelCobro from '../componentes/PanelCobro.jsx';
 import Tabla from '../componentes/Tabla.jsx';
 import Ticket from '../componentes/Ticket.jsx';
 import Tarjeta from '../componentes/Tarjeta.jsx';
+import { buscarProducto } from '../offline/catalogo.js';
 
 export default function Venta() {
   const [items, setItems] = useState([]);           // lo que lleva la venta
@@ -50,7 +51,8 @@ export default function Venta() {
   // Lo llama el lector de códigos cuando escanean algo.
   async function agregarPorCodigo(codigo) {
     try {
-      const producto = await pedir(`/productos/${encodeURIComponent(codigo)}`);
+      const producto = await buscarProducto(codigo);
+      if (!producto) throw Object.assign(new Error('No existe'), { status: 404 });
       agregar(producto);
     } catch (err) {
       setAviso(
@@ -78,10 +80,14 @@ export default function Venta() {
   // La API confirmó la venta: se vacía la pantalla y se muestra el ticket en una ventana.
   function alRegistrar(ticketNuevo) {
     setTicket(ticketNuevo);
-    setAviso(null);
     setItems([]);
     setMesa('');
     setDestino('LLEVAR');
+    setAviso(
+      ticketNuevo
+        ? null
+        : { tipo: 'alerta', texto: 'Venta guardada sin conexión. Se envía sola cuando vuelva internet.' }
+    );
   }
 
   const columnasVenta = [
