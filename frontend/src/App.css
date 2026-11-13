@@ -133,3 +133,9 @@
 .auditoria-datos div { display: flex; gap: var(--esp-2); padding: 1px 0; }
 .auditoria-datos dt { font-weight: 600; min-width: 11ch; }
 .auditoria-datos dd { margin: 0; }
+/* ---------- Cierre de caja ---------- */
+.cierre { display: grid; grid-template-columns: 1fr 1fr; gap: var(--esp-4); align-items: start; }
+.cierre-diferencia { font-size: var(--texto-l); font-weight: 700; }
+.cierre-ok { color: var(--exito); }
+.cierre-mal { color: var(--error); }
+@media (max-width: 900px) { .cierre { grid-template-columns: 1fr; } }
