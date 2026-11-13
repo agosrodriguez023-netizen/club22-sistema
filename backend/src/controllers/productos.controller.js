@@ -57,3 +57,13 @@ export const bajaLogica = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export async function porCodigo(req, res, next) {
+  try {
+    const producto = await Producto.buscarPorCodigo(req.params.codigo);
+    if (!producto) throw httpError(404, 'No existe un producto con ese código');
+    res.json(producto);
+  } catch (err) {
+    next(err);
+  }
+}
