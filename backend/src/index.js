@@ -8,6 +8,8 @@ import cajaRoutes from './routes/caja.routes.js';
 import { errores } from './middlewares/errores.js';
 import mediosPagoRoutes from './routes/mediosPago.routes.js';
 import catalogoRoutes from './routes/catalogo.routes.js';
+import usuariosRoutes from './routes/usuarios.routes.js';
+import auditoriaRoutes from './routes/auditoria.routes.js';
 
 
 const app = express();
@@ -24,6 +26,8 @@ app.use('/api/ventas', ventasRoutes);
 app.use('/api/caja', cajaRoutes);
 app.use('/api/medios-pago', mediosPagoRoutes);
 app.use('/api/catalogo', catalogoRoutes);
+app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/auditoria', auditoriaRoutes);
 
 // atrapa los errores de todas las rutas de arriba (siempre va al final de las rutas)
 app.use(errores);
@@ -31,3 +35,4 @@ app.use(errores);
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });
+
