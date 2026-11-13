@@ -121,3 +121,8 @@
   .ticket, .ticket * { visibility: visible; }
   .ticket { position: absolute; left: 0; top: 0; width: 80mm; }
 }
+
+
+/* ---------- Productos y precios ---------- */
+.catalogo-filtros { display: flex; flex-wrap: wrap; gap: var(--esp-3); align-items: flex-end; margin-bottom: var(--esp-3); }
+.catalogo-filtros .campo { margin-bottom: 0; min-width: 200px; }
