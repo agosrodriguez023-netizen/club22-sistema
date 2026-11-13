@@ -12,3 +12,4 @@ h1, h2, h3 { margin: 0 0 var(--esp-3); color: var(--bordo); }
 h1 { font-size: var(--texto-xl); }
 h2 { font-size: var(--texto-l); }
 :focus-visible { outline: var(--foco); outline-offset: 2px; }
+
