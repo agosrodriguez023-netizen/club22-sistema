@@ -1,4 +1,3 @@
-// backend/src/routes/auth.routes.js
 import { Router } from 'express';
 import { login, comprobarSalud, yo } from '../controllers/auth.controller.js';
 import { autenticar } from '../middlewares/autenticar.js';
