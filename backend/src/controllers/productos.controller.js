@@ -30,7 +30,8 @@ export const crear = async (req, res) => {
 
 export const editar = async (req, res) => {
     try {
-        const actualizado = await Producto.editar(req.params.id, req.body);
+        const actualizado = await Producto.editar(req.params.codigo, req.body);
+        if (!actualizado) return res.status(404).json({ error: 'Producto no encontrado' });
         res.json(actualizado);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -51,7 +52,8 @@ export const actualizarPrecio = async (req, res) => {
 
 export const bajaLogica = async (req, res) => {
     try {
-        await Producto.bajaLogica(req.params.id);
+        const baja = await Producto.bajaLogica(req.params.codigo);
+        if (!baja) return res.status(404).json({ error: 'Producto no encontrado' });
         res.json({ mensaje: 'Producto dado de baja exitosamente' });
     } catch (error) {
         res.status(500).json({ error: error.message });
