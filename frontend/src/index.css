@@ -1,15 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
 @import './estilos/tokens.css';
 
 *, *::before, *::after { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: var(--fuente);
-  font-size: var(--texto-m);
-  color: var(--negro);
-  background: var(--gris-100);
+  font-family: var(--fuente-interfaz);
+  font-size: var(--t-cuerpo);
+  line-height: var(--lh-cuerpo);
+  color: var(--texto);
+  background: var(--fondo);
 }
-h1, h2, h3 { margin: 0 0 var(--esp-3); color: var(--bordo); }
-h1 { font-size: var(--texto-xl); }
-h2 { font-size: var(--texto-l); }
-:focus-visible { outline: var(--foco); outline-offset: 2px; }
-
+h1, h2, h3 { margin: 0 0 var(--esp-3); color: var(--texto); }
+h1 { font-size: var(--t-h1); line-height: var(--lh-h1); }
+h2 { font-size: var(--t-h2); line-height: var(--lh-h2); }
+h3 { font-size: var(--t-h3); line-height: var(--lh-h3); font-family: var(--fuente-interfaz); font-weight: var(--peso-semi); }
+a { color: var(--enlace); }
