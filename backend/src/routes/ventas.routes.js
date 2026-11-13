@@ -6,6 +6,7 @@ import * as ventas from '../controllers/ventas.controller.js';
 const router = Router();
 router.use(autenticar);
 router.post('/', permitir('CAJERO', 'ADMINISTRADOR'), ventas.crear);
+router.post('/sincronizar', permitir('CAJERO', 'ADMINISTRADOR'), ventas.sincronizar);
 router.get('/:id', permitir('CAJERO', 'ADMINISTRADOR'), ventas.obtener);
 
 export default router;

@@ -47,8 +47,11 @@ export async function marcarIntento(item, motivo) {
  *  - Si el servidor la rechaza (stock, datos inválidos): el error sube a la pantalla y NO se encola.
  */
 export async function registrarVenta(datos) {
-  // El identificador se crea acá, una sola vez: si se reintenta, el servidor reconoce la venta repetida.
-  const venta = { ...datos, uuid_cliente: datos.uuid_cliente ?? crypto.randomUUID() };
+  const venta = {
+  ...datos,
+  uuid_cliente: datos.uuid_cliente ?? crypto.randomUUID(),
+  fecha_hora: datos.fecha_hora ?? new Date().toISOString(),   // la hora real de la venta, no la de la sincronización
+    };
   try {
     const respuesta = await pedir('/ventas', { method: 'POST', body: venta });
     return { ...respuesta, pendiente: false };
