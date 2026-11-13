@@ -11,7 +11,7 @@ export const Producto = {
 
     async buscarPorCodigo(codigo) {
     const { rows } = await pool.query(
-        `SELECT codigo, nombre, categoria, precio_mostrador, precio_mesa, stock_actual, controla_stock
+        `SELECT codigo, nombre, categoria, precio_mostrador, precio_mesa, stock_actual, stock_minimo, controla_stock
         FROM productos WHERE codigo = $1 AND activo = TRUE`,
         [codigo]
     );
@@ -19,19 +19,23 @@ export const Producto = {
     },
 
     crear: async (producto) => {
-        const { codigo, nombre, categoria, precio_mostrador, precio_mesa } = producto;
+        const { codigo, nombre, categoria, precio_mostrador, precio_mesa, stock_minimo } = producto;
         const res = await pool.query(
-            'INSERT INTO productos (codigo, nombre, categoria, precio_mostrador, precio_mesa) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [codigo, nombre, categoria, precio_mostrador, precio_mesa]
+            `INSERT INTO productos (codigo, nombre, categoria, precio_mostrador, precio_mesa, stock_minimo)
+             VALUES ($1, $2, $3, $4, $5, COALESCE($6, 0)) RETURNING *`,
+            [codigo, nombre, categoria, precio_mostrador, precio_mesa, stock_minimo]
         );
         return res.rows[0];
     },
 
-        editar: async (codigo, producto) => {
-        const { nombre, categoria } = producto;
+    editar: async (codigo, producto) => {
+        const { nombre, categoria, stock_minimo } = producto;
+        // COALESCE: si no llega stock_minimo, se deja el que ya tenía
         const result = await pool.query(
-            'UPDATE productos SET nombre = $1, categoria = $2 WHERE codigo = $3 RETURNING *',
-            [nombre, categoria, codigo]
+            `UPDATE productos
+             SET nombre = $1, categoria = $2, stock_minimo = COALESCE($3, stock_minimo)
+             WHERE codigo = $4 RETURNING *`,
+            [nombre, categoria, stock_minimo, codigo]
         );
         return result.rows[0];
     },
