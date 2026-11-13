@@ -1,0 +1,39 @@
+/* Tokens del manual de marca de Club 22: todos los colores, tamaños y espacios salen de acá. */
+:root {
+  /* Marca */
+  --bordo: #6B0F0A;
+  --bordo-oscuro: #4A0A07;
+  --bordo-suave: #F6E9E8;
+  --blanco: #FFFFFF;
+  --negro: #111111;
+
+  /* Grises */
+  --gris-900: #222222;
+  --gris-700: #4A4A4A;
+  --gris-500: #6B6B6B;   /* mínimo para texto sobre blanco (5,3:1) */
+  --gris-300: #C9C9C9;
+  --gris-100: #F2F2F2;
+
+  /* Estados (texto oscuro sobre fondo claro, para mantener el contraste) */
+  --exito: #1B5E2F;     --exito-fondo: #E6F4EA;
+  --alerta: #7A4E00;    --alerta-fondo: #FFF3D6;
+  --error: #9B1C1C;     --error-fondo: #FDECEC;
+  --info: #1F4E79;      --info-fondo: #E8F1FA;
+
+  /* Tipografía */
+  --fuente: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --texto-s: 0.875rem;
+  --texto-m: 1rem;
+  --texto-l: 1.25rem;
+  --texto-xl: 1.75rem;
+
+  /* Espaciado y formas */
+  --esp-1: 0.25rem;
+  --esp-2: 0.5rem;
+  --esp-3: 1rem;
+  --esp-4: 1.5rem;
+  --esp-5: 2rem;
+  --radio: 8px;
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.15);
+  --foco: 3px solid #1F4E79;
+}
