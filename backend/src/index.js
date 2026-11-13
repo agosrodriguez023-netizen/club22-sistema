@@ -10,6 +10,8 @@ import mediosPagoRoutes from './routes/mediosPago.routes.js';
 import catalogoRoutes from './routes/catalogo.routes.js';
 import usuariosRoutes from './routes/usuarios.routes.js';
 import auditoriaRoutes from './routes/auditoria.routes.js';
+import stockRoutes from './routes/stock.routes.js';
+
 
 
 const app = express();
@@ -28,6 +30,7 @@ app.use('/api/medios-pago', mediosPagoRoutes);
 app.use('/api/catalogo', catalogoRoutes);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/auditoria', auditoriaRoutes);
+app.use('/api/stock', stockRoutes);
 
 // atrapa los errores de todas las rutas de arriba (siempre va al final de las rutas)
 app.use(errores);
