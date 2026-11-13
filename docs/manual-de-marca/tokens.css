@@ -1,0 +1,123 @@
+/* ==========================================================================
+   Club 22 · Tokens del sistema de diseño (tema oscuro, uso con poca luz)
+   Fuente de verdad: manual-de-marca.md. Todos los contrastes están calculados
+   con la fórmula WCAG 2.x (ver sección 2.5 del manual).
+   Fuentes (agregar en index.html):
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+   ========================================================================== */
+:root {
+  color-scheme: dark;
+
+  /* ---- Marca: bordo (primario) ---- */
+  --bordo: #6B0F0A;            /* relleno de marca y botón primario */
+  --bordo-hover: #8A1A13;      /* hover del primario */
+  --bordo-activo: #A32219;     /* presionado */
+  --bordo-fondo: #2B0A08;      /* tinte oscuro para filas/ítems seleccionados */
+  --bordo-claro: #E8827A;      /* bordo legible como TEXTO o ícono sobre oscuro */
+
+  /* ---- Neutros: negro, grises, blanco ---- */
+  --negro: #111111;            /* fondo de la app */
+  --superficie-1: #1C1C1C;     /* tarjetas, tabla, panel lateral */
+  --superficie-2: #262626;     /* modal, campos, elementos elevados */
+  --divisor: #3A3A3A;          /* líneas decorativas (no usar para bordes de controles) */
+  --borde-control: #808080;    /* bordes de campos y controles (≥ 3:1) */
+  --gris-texto-tenue: #9A9A9A; /* ayudas, placeholders, metadatos */
+  --gris-texto: #C9C9C9;       /* texto secundario */
+  --blanco: #FFFFFF;           /* texto principal */
+
+  /* ---- Semánticos (texto/ícono sobre oscuro + fondo tintado) ---- */
+  --exito: #5FD08A;       --exito-fondo: #12261A;  --exito-solido: #5FD08A;
+  --alerta: #F2B84B;      --alerta-fondo: #2A2108; --alerta-solido: #F2B84B;
+  --error: #FF8A80;       --error-fondo: #2E1210;  --error-solido: #B3261E;
+  --info: #6FB3F2;        --info-fondo: #0F1E2E;   --info-solido: #6FB3F2;
+
+  /* ---- Alias de uso (usar estos en componentes) ---- */
+  --fondo: var(--negro);
+  --texto: var(--blanco);
+  --texto-secundario: var(--gris-texto);
+  --texto-tenue: var(--gris-texto-tenue);
+  --accion: var(--bordo);
+  --accion-hover: var(--bordo-hover);
+  --accion-texto: var(--blanco);
+  --enlace: var(--bordo-claro);
+  --deshabilitado-fondo: #2E2E2E;
+  --deshabilitado-texto: #9A9A9A;
+
+  /* ---- Tipografía ---- */
+  --fuente-titulos: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --fuente-interfaz: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --fuente: var(--fuente-interfaz);   /* compatibilidad con tokens.css del día 1 */
+  --peso-regular: 400;
+  --peso-medio: 500;
+  --peso-semi: 600;
+  --peso-bold: 700;
+
+  /* Escala (tamaño / interlineado) */
+  --t-display: 2.5rem;    --lh-display: 3rem;      /* 40 / 48 */
+  --t-h1: 2rem;           --lh-h1: 2.5rem;         /* 32 / 40 */
+  --t-h2: 1.5rem;         --lh-h2: 2rem;           /* 24 / 32 */
+  --t-h3: 1.25rem;        --lh-h3: 1.75rem;        /* 20 / 28 */
+  --t-cuerpo: 1rem;       --lh-cuerpo: 1.5rem;     /* 16 / 24 */
+  --t-cuerpo-s: 0.875rem; --lh-cuerpo-s: 1.25rem;  /* 14 / 20 */
+  --t-etiqueta: 0.8125rem;--lh-etiqueta: 1.125rem; /* 13 / 18 */
+  --t-numero: 1.75rem;    --lh-numero: 2.25rem;    /* 28 / 36, totales y montos */
+  /* Compatibilidad con día 1 */
+  --texto-s: var(--t-cuerpo-s);
+  --texto-m: var(--t-cuerpo);
+  --texto-l: var(--t-h3);
+  --texto-xl: var(--t-numero);
+
+  /* ---- Espaciado (unidad base 4 px) ---- */
+  --esp-0: 0;
+  --esp-1: 0.25rem;   /*  4 */
+  --esp-2: 0.5rem;    /*  8 */
+  --esp-3: 1rem;      /* 16 */
+  --esp-4: 1.5rem;    /* 24 */
+  --esp-5: 2rem;      /* 32 */
+  --esp-6: 3rem;      /* 48 */
+  --esp-7: 4rem;      /* 64 */
+
+  /* ---- Grilla y layout ---- */
+  --grilla-columnas: 12;
+  --grilla-gutter: 1.5rem;
+  --margen-pantalla: 1rem;        /* móvil/tablet vertical */
+  --margen-pantalla-ancha: 2rem;  /* escritorio ≥ 1024 px */
+  --ancho-menu: 240px;
+  --ancho-contenido-max: 1280px;
+  --alto-objetivo: 44px;          /* alto mínimo de botones y campos */
+
+  /* ---- Formas ---- */
+  --radio-s: 4px;     /* chips, etiquetas */
+  --radio: 8px;       /* botones, campos, tarjetas */
+  --radio-l: 12px;    /* modal */
+  --radio-pleno: 999px;
+  --borde-ancho: 2px;
+
+  /* ---- Elevación y foco ---- */
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.6);
+  --sombra-modal: 0 12px 32px rgba(0, 0, 0, 0.7);
+  --fondo-telon: rgba(0, 0, 0, 0.72);
+  --foco-color: #FFFFFF;
+  --foco-halo: #6FB3F2;
+  --foco: 3px solid var(--foco-color);
+  --foco-offset: 2px;
+
+  /* ---- Íconos ---- */
+  --icono-s: 16px;
+  --icono-m: 20px;
+  --icono-l: 24px;
+  --icono-xl: 32px;
+  --icono-trazo: 2px;
+
+  /* ---- Movimiento ---- */
+  --transicion: 150ms ease-out;
+}
+
+/* Base sugerida */
+html { background: var(--fondo); color: var(--texto); }
+body { font-family: var(--fuente-interfaz); font-size: var(--t-cuerpo); line-height: var(--lh-cuerpo); }
+h1, h2, h3, .titulo { font-family: var(--fuente-titulos); font-weight: var(--peso-bold); }
+:focus-visible { outline: var(--foco); outline-offset: var(--foco-offset); box-shadow: 0 0 0 5px var(--foco-halo); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
