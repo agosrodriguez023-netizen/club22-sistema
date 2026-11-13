@@ -121,3 +121,11 @@
   .ticket, .ticket * { visibility: visible; }
   .ticket { position: absolute; left: 0; top: 0; width: 80mm; }
 }
+
+
+/* ---------- Cierre de caja ---------- */
+.cierre { display: grid; grid-template-columns: 1fr 1fr; gap: var(--esp-4); align-items: start; }
+.cierre-diferencia { font-size: var(--texto-l); font-weight: 700; }
+.cierre-ok { color: var(--exito); }
+.cierre-mal { color: var(--error); }
+@media (max-width: 900px) { .cierre { grid-template-columns: 1fr; } }
