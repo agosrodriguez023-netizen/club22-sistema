@@ -83,3 +83,13 @@
 .venta-cantidad { display: inline-flex; align-items: center; gap: var(--esp-2); }
 .venta-total { font-size: var(--texto-xl); margin: var(--esp-3) 0; }
 @media (max-width: 900px) { .venta { grid-template-columns: 1fr; } }
+
+/* ---------- Cobro ---------- */
+.venta-derecha { display: grid; gap: var(--esp-4); }
+.cobro-medios { border: 0; padding: 0; margin: 0 0 var(--esp-3); display: flex; flex-wrap: wrap; gap: var(--esp-2); }
+.cobro-medios legend { font-weight: 600; margin-bottom: var(--esp-1); }
+.cobro-resumen { margin: 0 0 var(--esp-3); }
+.cobro-resumen div { display: flex; justify-content: space-between; padding: var(--esp-1) 0; }
+.cobro-resumen dt, .cobro-resumen dd { margin: 0; }
+.cobro-total { font-size: var(--texto-l); font-weight: 700; border-top: 1px solid var(--gris-300); }
+.cobro-vuelto { font-size: var(--texto-l); margin: var(--esp-3) 0; }

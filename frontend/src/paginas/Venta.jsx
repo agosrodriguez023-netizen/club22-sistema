@@ -5,6 +5,7 @@ import { dinero } from '../utils/dinero.js';
 import Boton from '../componentes/Boton.jsx';
 import Campo from '../componentes/Campo.jsx';
 import Mensaje from '../componentes/Mensaje.jsx';
+import PanelCobro from '../componentes/PanelCobro.jsx';
 import Tabla from '../componentes/Tabla.jsx';
 import Tarjeta from '../componentes/Tarjeta.jsx';
 
@@ -19,7 +20,7 @@ export default function Venta() {
 
   // En mesa se cobra el precio de mesa; para llevar, el de mostrador.
   const precioDe = (p) => (destino === 'MESA' ? p.precio_mesa : p.precio_mostrador);
-  const total = items.reduce((suma, i) => suma + precioDe(i) * i.cantidad, 0);
+  const subtotal = items.reduce((suma, i) => suma + precioDe(i) * i.cantidad, 0);
 
   function agregar(producto) {
     setItems((actuales) => {
@@ -72,6 +73,19 @@ export default function Venta() {
     }
   }
 
+  // La API confirmó la venta: se vacía la pantalla y se avisa el número de ticket.
+  // (El ticket completo en ventana es el paso siguiente, T-14.)
+  function alRegistrar(ticket) {
+    const vuelto = ticket.vuelto ? ` Vuelto: ${dinero(Number(ticket.vuelto))}.` : '';
+    setAviso({
+      tipo: 'exito',
+      texto: `Venta registrada. Ticket N° ${ticket.numero_ticket}. Total ${dinero(Number(ticket.total))}.${vuelto}`,
+    });
+    setItems([]);
+    setMesa('');
+    setDestino('LLEVAR');
+  }
+
   const columnasVenta = [
     { clave: 'nombre', titulo: 'Producto' },
     {
@@ -121,25 +135,29 @@ export default function Venta() {
           )}
         </Tarjeta>
 
-        <Tarjeta titulo="Venta actual">
-          <fieldset className="venta-destino">
-            <legend>¿Para dónde es?</legend>
-            <label>
-              <input type="radio" name="destino" checked={destino === 'LLEVAR'} onChange={() => setDestino('LLEVAR')} /> Para llevar
-            </label>
-            <label>
-              <input type="radio" name="destino" checked={destino === 'MESA'} onChange={() => setDestino('MESA')} /> Mesa
-            </label>
-          </fieldset>
-          {destino === 'MESA' && (
-            <Campo etiqueta="Número de mesa" type="number" min="1" value={mesa} onChange={(e) => setMesa(e.target.value)} />
-          )}
+        <div className="venta-derecha">
+          <Tarjeta titulo="Venta actual">
+            <fieldset className="venta-destino">
+              <legend>¿Para dónde es?</legend>
+              <label>
+                <input type="radio" name="destino" checked={destino === 'LLEVAR'} onChange={() => setDestino('LLEVAR')} /> Para llevar
+              </label>
+              <label>
+                <input type="radio" name="destino" checked={destino === 'MESA'} onChange={() => setDestino('MESA')} /> Mesa
+              </label>
+            </fieldset>
+            {destino === 'MESA' && (
+              <Campo etiqueta="Número de mesa" type="number" min="1" value={mesa} onChange={(e) => setMesa(e.target.value)} />
+            )}
 
-          <Tabla columnas={columnasVenta} filas={items} claveFila="codigo" vacio="Todavía no agregaste productos." />
+            <Tabla columnas={columnasVenta} filas={items} claveFila="codigo" vacio="Todavía no agregaste productos." />
 
-          <p className="venta-total">Total: <strong>{dinero(total)}</strong></p>
-          <Boton variante="secundario" disabled={items.length === 0} onClick={() => setItems([])}>Vaciar venta</Boton>
-        </Tarjeta>
+            <p className="venta-total">Total: <strong>{dinero(subtotal)}</strong></p>
+            <Boton variante="secundario" disabled={items.length === 0} onClick={() => setItems([])}>Vaciar venta</Boton>
+          </Tarjeta>
+
+          <PanelCobro items={items} destino={destino} mesa={mesa} subtotal={subtotal} alRegistrar={alRegistrar} />
+        </div>
       </div>
     </>
   );
