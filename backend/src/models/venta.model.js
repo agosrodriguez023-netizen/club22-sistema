@@ -124,6 +124,24 @@ const Venta = {
     });
   },
 
+    /** Ventas entre dos momentos (ISO). Si se pasa usuarioId, solo las de ese usuario. */
+  async listar({ desde, hasta, usuarioId }) {
+    const { rows } = await pool.query(
+      `SELECT v.id, v.fecha_hora, v.destino, v.total, v.estado,
+              c.numero AS numero_ticket, mp.nombre AS medio_pago, u.nombre AS atendido_por
+         FROM venta v
+         JOIN comprobante c    ON c.venta_id = v.id
+         JOIN medio_de_pago mp ON mp.id = v.medio_pago_id
+         JOIN usuarios u       ON u.id = v.usuario_id
+        WHERE v.fecha_hora >= $1 AND v.fecha_hora < $2
+          AND ($3::int IS NULL OR v.usuario_id = $3)
+        ORDER BY v.fecha_hora DESC, v.id DESC`,
+      [desde, hasta, usuarioId ?? null]
+    );
+    return rows;
+  },
+
+
   /** Devuelve la venta lista para mostrar el ticket. */
   async obtener(id) {
     const { rows } = await pool.query(
