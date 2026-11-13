@@ -7,6 +7,7 @@ import Campo from '../componentes/Campo.jsx';
 import Mensaje from '../componentes/Mensaje.jsx';
 import PanelCobro from '../componentes/PanelCobro.jsx';
 import Tabla from '../componentes/Tabla.jsx';
+import Ticket from '../componentes/Ticket.jsx';
 import Tarjeta from '../componentes/Tarjeta.jsx';
 
 export default function Venta() {
@@ -17,6 +18,7 @@ export default function Venta() {
   const [resultados, setResultados] = useState(null); // null = todavía no buscó
   const [buscando, setBuscando] = useState(false);
   const [aviso, setAviso] = useState(null);          // { tipo, texto }
+  const [ticket, setTicket] = useState(null);        // el ticket de la última venta (se muestra en una ventana)
 
   // En mesa se cobra el precio de mesa; para llevar, el de mostrador.
   const precioDe = (p) => (destino === 'MESA' ? p.precio_mesa : p.precio_mostrador);
@@ -73,14 +75,10 @@ export default function Venta() {
     }
   }
 
-  // La API confirmó la venta: se vacía la pantalla y se avisa el número de ticket.
-  // (El ticket completo en ventana es el paso siguiente, T-14.)
-  function alRegistrar(ticket) {
-    const vuelto = ticket.vuelto ? ` Vuelto: ${dinero(Number(ticket.vuelto))}.` : '';
-    setAviso({
-      tipo: 'exito',
-      texto: `Venta registrada. Ticket N° ${ticket.numero_ticket}. Total ${dinero(Number(ticket.total))}.${vuelto}`,
-    });
+  // La API confirmó la venta: se vacía la pantalla y se muestra el ticket en una ventana.
+  function alRegistrar(ticketNuevo) {
+    setTicket(ticketNuevo);
+    setAviso(null);
     setItems([]);
     setMesa('');
     setDestino('LLEVAR');
@@ -159,6 +157,8 @@ export default function Venta() {
           <PanelCobro items={items} destino={destino} mesa={mesa} subtotal={subtotal} alRegistrar={alRegistrar} />
         </div>
       </div>
+
+      <Ticket ticket={ticket} onCerrar={() => setTicket(null)} />
     </>
   );
 }

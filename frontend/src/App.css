@@ -99,3 +99,25 @@
 .usuarios-cabecera { display: flex; justify-content: space-between; align-items: center; gap: var(--esp-3); flex-wrap: wrap; margin-bottom: var(--esp-3); }
 .usuarios-cabecera p { margin: 0; }
 .usuarios-acciones { display: inline-flex; gap: var(--esp-2); flex-wrap: wrap; }
+
+
+/* ---------- Ticket ---------- */
+.ticket { font-family: ui-monospace, Consolas, monospace; font-size: var(--texto-s); }
+.ticket p { margin: var(--esp-1) 0; }
+.ticket-marca { font-size: var(--texto-l); font-weight: 700; text-align: center; color: var(--bordo); }
+.ticket-centro { text-align: center; }
+.ticket-tabla { width: 100%; border-collapse: collapse; margin: var(--esp-3) 0; }
+.ticket-tabla th, .ticket-tabla td { text-align: left; padding: 2px 0; border-bottom: 1px dashed var(--gris-500); }
+.ticket-tabla th:last-child, .ticket-tabla td:last-child { text-align: right; }
+.ticket-totales { margin: 0; }
+.ticket-totales div { display: flex; justify-content: space-between; padding: 2px 0; }
+.ticket-totales dt, .ticket-totales dd { margin: 0; }
+.ticket-total { font-size: var(--texto-m); font-weight: 700; border-top: 2px solid var(--negro); }
+.ticket-leyenda { text-align: center; font-weight: 700; margin-top: var(--esp-3); }
+
+/* Al imprimir solo sale el ticket, sin el resto de la pantalla */
+@media print {
+  body * { visibility: hidden; }
+  .ticket, .ticket * { visibility: visible; }
+  .ticket { position: absolute; left: 0; top: 0; width: 80mm; }
+}
