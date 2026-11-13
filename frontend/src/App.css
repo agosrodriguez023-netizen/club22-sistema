@@ -123,6 +123,16 @@
 }
 
 
+/* ---------- Registro de acciones ---------- */
+.auditoria-filtros { display: flex; flex-wrap: wrap; gap: var(--esp-3); align-items: flex-end; margin-bottom: var(--esp-3); }
+.auditoria-filtros .campo { margin-bottom: 0; }
+.auditoria-botones { display: flex; gap: var(--esp-2); }
+.auditoria-detalle summary { cursor: pointer; color: var(--bordo); font-weight: 600; }
+.auditoria-detalle pre { margin: var(--esp-1) 0 var(--esp-2); padding: var(--esp-2); background: var(--gris-100); border-radius: var(--radio); font-size: var(--texto-s); overflow-x: auto; white-space: pre-wrap; }
+.auditoria-datos { margin: var(--esp-1) 0 var(--esp-2); font-size: var(--texto-s); }
+.auditoria-datos div { display: flex; gap: var(--esp-2); padding: 1px 0; }
+.auditoria-datos dt { font-weight: 600; min-width: 11ch; }
+.auditoria-datos dd { margin: 0; }
 /* ---------- Cierre de caja ---------- */
 .cierre { display: grid; grid-template-columns: 1fr 1fr; gap: var(--esp-4); align-items: start; }
 .cierre-diferencia { font-size: var(--texto-l); font-weight: 700; }
