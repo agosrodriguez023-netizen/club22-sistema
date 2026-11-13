@@ -1,40 +1,39 @@
-/* frontend/src/estilos/tokens.css */
+/* Tokens del manual de marca de Club 22: todos los colores, tamaños y espacios salen de acá. */
 :root {
-  /* Colores de Marca */
+  /* Marca */
   --bordo: #6B0F0A;
-  --bordo-hover: #520b07;
+  --bordo-oscuro: #4A0A07;
+  --bordo-suave: #F6E9E8;
   --blanco: #FFFFFF;
-  --negro: #1A1A1A;
+  --negro: #111111;
 
-  /* Escala de Grises */
-  --gris-50: #F9FAFB;
-  --gris-100: #F3F4F6;
-  --gris-200: #E5E7EB;
-  --gris-400: #9CA3AF;
-  --gris-600: #4B5563;
-  --gris-900: #111827;
+  /* Grises */
+  --gris-900: #222222;
+  --gris-700: #4A4A4A;
+  --gris-500: #6B6B6B;   /* mínimo para texto sobre blanco (5,3:1) */
+  --gris-300: #C9C9C9;
+  --gris-100: #F2F2F2;
 
-  /* Colores de Estado */
-  --exito: #059669;       /* Verde para operaciones correctas */
-  --alerta: #D97706;      /* Amarillo/Naranja para stock mínimo */
-  --error: #DC2626;       /* Rojo para fallos o errores */
-  --info: #2563EB;        /* Azul informativo */
+  /* Estados (texto oscuro sobre fondo claro, para mantener el contraste) */
+  --exito: #1B5E2F;     --exito-fondo: #E6F4EA;
+  --alerta: #7A4E00;    --alerta-fondo: #FFF3D6;
+  --error: #9B1C1C;     --error-fondo: #FDECEC;
+  --info: #1F4E79;      --info-fondo: #E8F1FA;
 
   /* Tipografía */
-  --fuente-principal: 'Inter', system-ui, -apple-system, sans-serif;
-  --peso-normal: 400;
-  --peso-medio: 500;
-  --peso-negrita: 700;
+  --fuente: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --texto-s: 0.875rem;
+  --texto-m: 1rem;
+  --texto-l: 1.25rem;
+  --texto-xl: 1.75rem;
 
-  /* Espaciados y Radios */
-  --radio-borde: 8px;
-  --sombra-tarjeta: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-body {
-  font-family: var(--fuente-principal);
-  background-color: var(--gris-50);
-  color: var(--gris-900);
-  margin: 0;
-  padding: 0;
+  /* Espaciado y formas */
+  --esp-1: 0.25rem;
+  --esp-2: 0.5rem;
+  --esp-3: 1rem;
+  --esp-4: 1.5rem;
+  --esp-5: 2rem;
+  --radio: 8px;
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.15);
+  --foco: 3px solid #1F4E79;
 }

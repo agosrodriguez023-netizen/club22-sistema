@@ -1,40 +1,35 @@
-// frontend/src/context/AuthContext.jsx
-import React, { createContext, useContext, useState } from 'react';
-import { pedir } from '../api/cliente';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { pedir, sesion } from '../api/cliente.js';
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [usuario, setUsuario] = useState({
-    id: 1,
-    nombre: 'Admin',
-    rol: 'ADMINISTRADOR'
-  });
-  const login = async (nombre, password) => {
-    // Hace la petición POST al endpoint de login del backend
-    const respuesta = await pedir('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ nombre, password }),
-    });
+  const [usuario, setUsuario] = useState(() => (sesion.token() ? sesion.usuario() : null));
 
-    localStorage.setItem('token_club22', respuesta.token);
-    localStorage.setItem('usuario_club22', JSON.stringify(respuesta.usuario));
-    setUsuario(respuesta.usuario);
-    return respuesta.usuario;
-  };
+  // Si la API dice 401 (token vencido), el cliente avisa y cerramos la sesión acá.
+  useEffect(() => {
+    const cerrar = () => setUsuario(null);
+    window.addEventListener('club22:sesion-vencida', cerrar);
+    return () => window.removeEventListener('club22:sesion-vencida', cerrar);
+  }, []);
 
-  const logout = () => {
-    localStorage.removeItem('token_club22');
-    localStorage.removeItem('usuario_club22');
+  async function login(nombre, password) {
+    const datos = await pedir('/auth/login', { method: 'POST', body: { nombre, password } });
+    // El backend puede devolver { token, usuario: {...} } o { token, id, nombre, rol }.
+    const u = datos.usuario ?? { id: datos.id, nombre: datos.nombre, rol: datos.rol };
+    sesion.guardar(datos.token, u);
+    setUsuario(u);
+    return u;
+  }
+
+  function logout() {
+    sesion.borrar();
     setUsuario(null);
-    window.location.href = '/login';
-  };
+  }
 
-  return (
-    <AuthContext.Provider value={{ usuario, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ usuario, login, logout }}>{children}</AuthContext.Provider>;
 }
 
-export const useAuth = () => useContext(AuthContext);
+export function useAuth() {
+  return useContext(AuthContext);
+}

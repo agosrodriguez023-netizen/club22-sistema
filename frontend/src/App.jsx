@@ -1,12 +1,44 @@
-import React from 'react';
-import Login from './paginas/Login';
-import { AuthProvider } from './context/AuthContext';
-import './estilos/tokens.css';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import './App.css';
+import Layout from './componentes/Layout.jsx';
+import RutaProtegida from './componentes/RutaProtegida.jsx';
+import Componentes from './paginas/Componentes.jsx';
+import Inicio from './paginas/Inicio.jsx';
+import Login from './paginas/Login.jsx';
+import Pendiente from './paginas/Pendiente.jsx';
+
+const TODOS = ['ADMINISTRADOR', 'CAJERO', 'SALA', 'INVENTARIO'];
+const CAJA = ['ADMINISTRADOR', 'CAJERO'];
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Login />
-    </AuthProvider>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+
+      {/* Todo lo de acá adentro exige estar logueado y muestra el Layout con el menú */}
+      <Route element={<RutaProtegida />}>
+        <Route element={<Layout />}>
+          <Route path="/inicio" element={<Inicio />} />
+          <Route path="/componentes" element={<Componentes />} />
+
+          <Route element={<RutaProtegida roles={CAJA} />}>
+            <Route path="/venta" element={<Pendiente titulo="Venta" />} />
+            <Route path="/ventas" element={<Pendiente titulo="Mis ventas del día" />} />
+            <Route path="/caja/cierre" element={<Pendiente titulo="Cierre de caja" />} />
+          </Route>
+
+          <Route element={<RutaProtegida roles={TODOS} />}>
+            <Route path="/catalogo" element={<Pendiente titulo="Productos y precios" />} />
+          </Route>
+
+          <Route element={<RutaProtegida roles={['ADMINISTRADOR']} />}>
+            <Route path="/admin/usuarios" element={<Pendiente titulo="Usuarios" />} />
+            <Route path="/admin/auditoria" element={<Pendiente titulo="Registro de acciones" />} />
+          </Route>
+        </Route>
+      </Route>
+
+      <Route path="*" element={<Navigate to="/inicio" replace />} />
+    </Routes>
   );
 }

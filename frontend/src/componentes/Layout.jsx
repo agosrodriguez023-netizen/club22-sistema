@@ -1,13 +1,28 @@
-// frontend/src/componentes/Layout.jsx
-import React from 'react';
-import MenuLateral from './MenuLateral';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
+import MenuLateral from './MenuLateral.jsx';
 
-export default function Layout({ children }) {
+export default function Layout() {
+  const { usuario, logout } = useAuth();
+  const navegar = useNavigate();
+
+  function salir() {
+    logout();
+    navegar('/login');
+  }
+
   return (
-    <div style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
+    <div className="layout">
+      <header className="layout-cabecera">
+        <span className="layout-marca">Club 22</span>
+        <div className="layout-usuario">
+          <span>{usuario.nombre} · {usuario.rol}</span>
+          <button className="boton boton-secundario" onClick={salir}>Salir</button>
+        </div>
+      </header>
       <MenuLateral />
-      <main style={{ flex: 1, padding: '32px', overflowY: 'auto', backgroundColor: 'var(--gris-50)' }}>
-        {children}
+      <main className="layout-contenido">
+        <Outlet />
       </main>
     </div>
   );

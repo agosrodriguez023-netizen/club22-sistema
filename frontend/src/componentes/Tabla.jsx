@@ -1,22 +1,22 @@
-// frontend/src/componentes/Tabla.jsx
-import React from 'react';
+import Estado from './Estado.jsx';
 
-export default function Tabla({ columnas, datos }) {
+/**
+ * columnas: [{ clave: 'nombre', titulo: 'Producto', render?: (fila) => ... }]
+ * filas: arreglo de objetos. Si está vacío muestra el estado "vacío".
+ */
+export default function Tabla({ columnas, filas, claveFila = 'id', vacio = 'No hay datos para mostrar.' }) {
+  if (!filas || filas.length === 0) return <Estado tipo="vacio">{vacio}</Estado>;
   return (
-    <div style={{ overflowX: 'auto', width: '100%' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '14px' }}>
+    <div className="tabla-contenedor">
+      <table className="tabla">
         <thead>
-          <tr style={{ borderBottom: '2px solid var(--gris-200)', color: 'var(--gris-600)' }}>
-            {columnas.map((col, index) => (
-              <th key={index} style={{ padding: '12px' }}>{col}</th>
-            ))}
-          </tr>
+          <tr>{columnas.map((c) => <th key={c.clave} scope="col">{c.titulo}</th>)}</tr>
         </thead>
         <tbody>
-          {datos.map((fila, rowIndex) => (
-            <tr key={rowIndex} style={{ borderBottom: '1px solid var(--gris-100)' }}>
-              {Object.values(fila).map((valor, cellIndex) => (
-                <td key={cellIndex} style={{ padding: '12px', color: 'var(--gris-900)' }}>{valor}</td>
+          {filas.map((fila, i) => (
+            <tr key={fila[claveFila] ?? i}>
+              {columnas.map((c) => (
+                <td key={c.clave}>{c.render ? c.render(fila) : fila[c.clave]}</td>
               ))}
             </tr>
           ))}

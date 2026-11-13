@@ -1,25 +1,21 @@
-// frontend/src/componentes/Campo.jsx
-import React from 'react';
+import { useId } from 'react';
 
-export default function Campo({ label, type = 'text', value, onChange, error, placeholder }) {
+// Campo de formulario con etiqueta, ayuda y mensaje de error asociados al input.
+export default function Campo({ etiqueta, error, ayuda, ...resto }) {
+  const id = useId();
+  const idAyuda = `${id}-ayuda`;
+  const idError = `${id}-error`;
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' }}>
-      {label && <label style={{ fontSize: '14px', fontWeight: '500', color: 'var(--gris-600)' }}>{label}</label>}
+    <div className={`campo ${error ? 'campo-error' : ''}`}>
+      <label htmlFor={id}>{etiqueta}</label>
       <input
-        type={type}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        style={{
-          padding: '10px',
-          borderRadius: 'var(--radio-borde)',
-          border: `1px solid ${error ? 'var(--error)' : 'var(--gris-200)'}`,
-          outline: 'none',
-          fontSize: '14px',
-          backgroundColor: 'var(--blanco)'
-        }}
+        id={id}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? idError : ayuda ? idAyuda : undefined}
+        {...resto}
       />
-      {error && <span style={{ fontSize: '12px', color: 'var(--error)' }}>{error}</span>}
+      {ayuda && !error && <span id={idAyuda} className="campo-ayuda">{ayuda}</span>}
+      {error && <span id={idError} className="campo-mensaje-error" role="alert">{error}</span>}
     </div>
   );
 }

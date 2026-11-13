@@ -1,27 +1,20 @@
-// frontend/src/componentes/Modal.jsx
-import React from 'react';
-import Boton from './Boton';
+import { useEffect, useRef } from 'react';
 
-export default function Modal({ isOpen, onClose, titulo, children }) {
-  if (!isOpen) return null;
+// Usa el <dialog> nativo del navegador: se cierra con Esc y el foco queda dentro de la ventana.
+export default function Modal({ abierto, titulo, onCerrar, children }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const dialogo = ref.current;
+    if (!dialogo) return;
+    if (abierto && !dialogo.open) dialogo.showModal();
+    if (!abierto && dialogo.open) dialogo.close();
+  }, [abierto]);
 
   return (
-    <div style={{
-      position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
-    }}>
-      <div style={{
-        background: 'var(--blanco)', padding: '24px', borderRadius: 'var(--radio-borde)',
-        width: '100%', maxWidth: '500px', boxShadow: 'var(--sombra-tarjeta)', position: 'relative'
-      }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 style={{ margin: 0, color: 'var(--bordo)' }}>{titulo}</h3>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '18px', cursor: 'pointer', color: 'var(--gris-600)' }}>✕</button>
-        </div>
-        <div>
-          {children}
-        </div>
-      </div>
-    </div>
+    <dialog ref={ref} className="modal" aria-labelledby="modal-titulo" onClose={onCerrar}>
+      <h2 id="modal-titulo">{titulo}</h2>
+      {children}
+    </dialog>
   );
 }
