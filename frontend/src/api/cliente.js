@@ -50,7 +50,7 @@ export async function pedir(ruta, { method = 'GET', body } = {}) {
       sesion.borrar();
       window.dispatchEvent(new Event('club22:sesion-vencida'));
     }
-    const e = new Error(datos?.mensaje || 'Ocurrió un error');
+    const e = new Error(datos?.error || datos?.mensaje || 'Ocurrió un error');
     e.status = respuesta.status;
     throw e;
   }
