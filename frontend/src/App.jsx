@@ -8,6 +8,8 @@ import Login from './paginas/Login.jsx';
 import Pendiente from './paginas/Pendiente.jsx';
 import Venta from './paginas/Venta.jsx';
 import Usuarios from './paginas/Usuarios.jsx';
+import Auditoria from './paginas/Auditoria.jsx';
+import CierreCaja from './paginas/CierreCaja.jsx';
 import Catalogo from './paginas/Catalogo.jsx';
 
 const TODOS = ['ADMINISTRADOR', 'CAJERO', 'SALA', 'INVENTARIO'];
@@ -27,7 +29,7 @@ export default function App() {
           <Route element={<RutaProtegida roles={CAJA} />}>
             <Route path="/venta" element={<Venta />} />
             <Route path="/ventas" element={<Pendiente titulo="Mis ventas del día" />} />
-            <Route path="/caja/cierre" element={<Pendiente titulo="Cierre de caja" />} />
+            <Route path="/caja/cierre" element={<CierreCaja />} />
           </Route>
 
           <Route element={<RutaProtegida roles={TODOS} />}>
@@ -36,7 +38,7 @@ export default function App() {
 
           <Route element={<RutaProtegida roles={['ADMINISTRADOR']} />}>
             <Route path="/admin/usuarios" element={<Usuarios />} />
-            <Route path="/admin/auditoria" element={<Pendiente titulo="Registro de acciones" />} />
+            <Route path="/admin/auditoria" element={<Auditoria />} />
           </Route>
         </Route>
       </Route>
