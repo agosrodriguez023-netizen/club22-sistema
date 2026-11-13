@@ -7,6 +7,7 @@ import Inicio from './paginas/Inicio.jsx';
 import Login from './paginas/Login.jsx';
 import Pendiente from './paginas/Pendiente.jsx';
 import Venta from './paginas/Venta.jsx';
+import Usuarios from './paginas/Usuarios.jsx';
 
 const TODOS = ['ADMINISTRADOR', 'CAJERO', 'SALA', 'INVENTARIO'];
 const CAJA = ['ADMINISTRADOR', 'CAJERO'];
@@ -33,7 +34,7 @@ export default function App() {
           </Route>
 
           <Route element={<RutaProtegida roles={['ADMINISTRADOR']} />}>
-            <Route path="/admin/usuarios" element={<Pendiente titulo="Usuarios" />} />
+            <Route path="/admin/usuarios" element={<Usuarios />} />
             <Route path="/admin/auditoria" element={<Pendiente titulo="Registro de acciones" />} />
           </Route>
         </Route>

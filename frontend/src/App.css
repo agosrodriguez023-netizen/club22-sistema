@@ -93,3 +93,9 @@
 .cobro-resumen dt, .cobro-resumen dd { margin: 0; }
 .cobro-total { font-size: var(--texto-l); font-weight: 700; border-top: 1px solid var(--gris-300); }
 .cobro-vuelto { font-size: var(--texto-l); margin: var(--esp-3) 0; }
+
+
+/* ---------- Usuarios ---------- */
+.usuarios-cabecera { display: flex; justify-content: space-between; align-items: center; gap: var(--esp-3); flex-wrap: wrap; margin-bottom: var(--esp-3); }
+.usuarios-cabecera p { margin: 0; }
+.usuarios-acciones { display: inline-flex; gap: var(--esp-2); flex-wrap: wrap; }
