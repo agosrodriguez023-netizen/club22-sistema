@@ -27,38 +27,43 @@ export const Producto = {
         return res.rows[0];
     },
 
-    editar: async (id, producto) => {
+        editar: async (codigo, producto) => {
         const { nombre, categoria } = producto;
         const result = await pool.query(
-            'UPDATE productos SET nombre = $1, categoria = $2 WHERE id = $3 RETURNING *',
-            [nombre, categoria, id]
+            'UPDATE productos SET nombre = $1, categoria = $2 WHERE codigo = $3 RETURNING *',
+            [nombre, categoria, codigo]
         );
         return result.rows[0];
     },
 
-    bajaLogica: async (id) => {
+    bajaLogica: async (codigo) => {
         const result = await pool.query(
-            'UPDATE productos SET activo = false WHERE id = $1 RETURNING *',
-            [id]
+            'UPDATE productos SET activo = false WHERE codigo = $1 RETURNING *',
+            [codigo]
         );
         return result.rows[0];
     },
 
-actualizarPrecio: async (codigo, precioMostrador, precioMesa, usuario_id) => {
+    actualizarPrecio: async (codigo, precioMostrador, precioMesa, usuario_id) => {
         return await transaccion(async (cliente) => {
-            const resAnterior = await cliente.query('SELECT nombre, precio_mostrador, precio_mesa FROM productos WHERE codigo = $1', [codigo]);
-            const { nombre, precio_mostrador: prevMostrador, precio_mesa: prevMesa } = resAnterior.rows[0];
-            
+            const resAnterior = await cliente.query(
+                'SELECT codigo, nombre, precio_mostrador, precio_mesa FROM productos WHERE codigo = $1',
+                [codigo]
+            );
+            if (resAnterior.rows.length === 0) return undefined;
+
             const resNuevo = await cliente.query(
-                'UPDATE productos SET precio_mostrador = $1, precio_mesa = $2 WHERE codigo = $3 RETURNING *',
+                'UPDATE productos SET precio_mostrador = $1, precio_mesa = $2 WHERE codigo = $3 RETURNING codigo, nombre, precio_mostrador, precio_mesa',
                 [precioMostrador, precioMesa, codigo]
             );
-            
+
+            // Queda registrado quién cambió el precio, con el antes y el después
             await cliente.query(
-                `INSERT INTO auditoria (accion, detalle, usuario_id) VALUES ($1, $2, $3)`,
-                ['CAMBIO_PRECIO', `Producto: ${nombre} | Mostrador: $${prevMostrador}->$${precioMostrador} | Mesa: $${prevMesa}->$${precioMesa}`, usuario_id || null]
+                `INSERT INTO auditoria (usuario_id, accion, entidad, antes, despues)
+                 VALUES ($1, 'CAMBIO_PRECIO', 'productos', $2, $3)`,
+                [usuario_id, JSON.stringify(resAnterior.rows[0]), JSON.stringify(resNuevo.rows[0])]
             );
-            
+
             return resNuevo.rows[0];
         });
     }
