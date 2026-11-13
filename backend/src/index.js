@@ -15,6 +15,7 @@ import mesasRoutes from './routes/mesas.routes.js';
 import proveedoresRoutes from './routes/proveedores.routes.js';
 import pedidosRoutes from './routes/pedidos.routes.js';
 import reservasRoutes from './routes/reservas.routes.js';
+import promocionesRoutes from './routes/promociones.routes.js';
 
 
 const app = express();
@@ -38,6 +39,7 @@ app.use('/api/mesas', mesasRoutes);
 app.use('/api/proveedores', proveedoresRoutes);
 app.use('/api/pedidos', pedidosRoutes);
 app.use('/api/reservas', reservasRoutes);
+app.use('/api/promociones', promocionesRoutes);
 
 // atrapa los errores de todas las rutas de arriba (siempre va al final de las rutas)
 app.use(errores);

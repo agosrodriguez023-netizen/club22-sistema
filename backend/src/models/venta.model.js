@@ -1,5 +1,7 @@
 import { pool, transaccion } from '../config/db.js';
 import { httpError } from '../utils/httpError.js';
+import { elegirPromocion } from '../utils/promociones.js';
+import Promocion from './promocion.model.js';
 
 // Los importes se calculan en CENTAVOS (enteros) para evitar errores de decimales.
 const aCentavos = (pesos) => Math.round(Number(pesos) * 100);
@@ -19,7 +21,7 @@ const Venta = {
       // 1) Traer de la base los productos reales (no confiamos en los precios del navegador)
       const codigos = datos.items.map((i) => i.codigo);
       const { rows: productos } = await client.query(
-        `SELECT codigo, nombre, precio_mostrador, precio_mesa, controla_stock
+        `SELECT codigo, nombre, categoria, precio_mostrador, precio_mesa, controla_stock
            FROM productos WHERE codigo = ANY($1) AND activo = TRUE`,
         [codigos]
       );
@@ -39,10 +41,28 @@ const Venta = {
         return { p, cantidad: item.cantidad, precioC, subtotalC: precioC * item.cantidad };
       });
 
-      // 3) Subtotal, descuento y total
+      // 3) Subtotal, descuento y total.
+      //    RN-01: promoción y descuento manual no se suman. Si el cajero carga un descuento manual,
+      //    no se aplican promociones. Si no, cada producto recibe UNA sola promoción (la mejor vigente).
       const subtotalC = lineas.reduce((acc, l) => acc + l.subtotalC, 0);
       const descuentoPct = datos.descuento_pct ?? 0;
-      const descuentoC = Math.round((subtotalC * descuentoPct) / 100);
+      let descuentoC = Math.round((subtotalC * descuentoPct) / 100);
+      let promocionId = null;
+      if (descuentoPct === 0) {
+        // RN-04: se miran las promociones vigentes en el momento de la venta (si fue sin conexión, cuando se hizo)
+        const vigentes = await Promocion.vigentes(datos.fecha_hora ?? new Date(), client);
+        const porPromo = new Map(); // id de promoción -> centavos que descontó
+        descuentoC = 0;
+        for (const l of lineas) {
+          const promo = elegirPromocion(l.p, vigentes);
+          if (!promo) continue;
+          const d = Math.round((l.subtotalC * Number(promo.porcentaje)) / 100);
+          descuentoC += d;
+          porPromo.set(promo.id, (porPromo.get(promo.id) ?? 0) + d);
+        }
+        // La venta guarda una sola promoción: la que más descontó
+        promocionId = [...porPromo].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
+      }
       const totalC = subtotalC - descuentoC;
 
       // 4) Medio de pago y vuelto (solo en efectivo)
@@ -67,9 +87,9 @@ const Venta = {
       //    (por ejemplo, reenviada al volver internet): no se guarda de nuevo.
       const { rows: nueva } = await client.query(
         `INSERT INTO venta (uuid_cliente, fecha_hora, usuario_id, destino, mesa_id, subtotal,
-                            descuento_manual_pct, descuento_total, total, medio_pago_id,
+                            descuento_manual_pct, promocion_id, descuento_total, total, medio_pago_id,
                             monto_recibido, vuelto, origen)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
          ON CONFLICT (uuid_cliente) DO NOTHING
          RETURNING id`,
         [
@@ -80,6 +100,7 @@ const Venta = {
           datos.destino === 'MESA' ? datos.mesa_id : null,
           aPesos(subtotalC),
           descuentoPct,
+          promocionId,
           aPesos(descuentoC),
           aPesos(totalC),
           datos.medio_pago_id,
@@ -147,14 +168,15 @@ const Venta = {
     const { rows } = await pool.query(
       `SELECT v.id, v.uuid_cliente, v.fecha_hora, v.destino, v.subtotal, v.descuento_manual_pct,
               v.descuento_total, v.total, v.monto_recibido, v.vuelto, v.origen, v.estado,
-              c.numero AS numero_ticket, c.leyenda,
+              c.numero AS numero_ticket, c.leyenda, pr.nombre AS promocion,
               mp.nombre AS medio_pago, u.nombre AS atendido_por, m.etiqueta AS mesa
          FROM venta v
          JOIN comprobante c    ON c.venta_id = v.id
          JOIN medio_de_pago mp ON mp.id = v.medio_pago_id
          JOIN usuarios u       ON u.id = v.usuario_id
          LEFT JOIN mesa m      ON m.id = v.mesa_id
-        WHERE v.id = $1`,
+         LEFT JOIN promocion pr ON pr.id = v.promocion_id
+         WHERE v.id = $1`,
       [id]
     );
     if (rows.length === 0) return null;
