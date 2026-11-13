@@ -6,6 +6,8 @@ import Campo from './Campo.jsx';
 import Estado from './Estado.jsx';
 import Mensaje from './Mensaje.jsx';
 import Tarjeta from './Tarjeta.jsx';
+import { registrarVenta } from '../offline/cola.js';
+
 
 /**
  * Cobro de la venta: medio de pago, descuento manual, monto recibido y vuelto.
@@ -65,25 +67,32 @@ export default function PanelCobro({ items, destino, mesa, subtotal, alRegistrar
     if (!puedeConfirmar) return;
     setEnviando(true);
     setErrorEnvio('');
+
+    const datosVenta = {
+      uuid_cliente: uuidRef.current,
+      destino,
+      mesa_id: destino === 'MESA' ? Number(mesa) : undefined,
+      items: items.map((i) => ({ codigo: i.codigo, cantidad: i.cantidad })),
+      medio_pago_id: medioId,
+      descuento_pct: pct,
+      monto_recibido: esEfectivo ? Number(recibido) : undefined,
+    };
+
     try {
-      const respuesta = await pedir('/ventas', {
-        method: 'POST',
-        body: {
-          uuid_cliente: uuidRef.current,
-          destino,
-          mesa_id: destino === 'MESA' ? Number(mesa) : undefined,
-          items: items.map((i) => ({ codigo: i.codigo, cantidad: i.cantidad })),
-          medio_pago_id: medioId,
-          descuento_pct: pct,
-          monto_recibido: esEfectivo ? Number(recibido) : undefined,
-        },
-      });
-      uuidRef.current = crypto.randomUUID(); // la próxima venta lleva otro identificador
+      // Llamamos a la función maestra de cola.js
+      const respuesta = await registrarVenta(datosVenta);
+      
+      // Vaciamos la pantalla (tanto si se envió como si quedó en cola)
+      uuidRef.current = crypto.randomUUID();
       setMedioId(null);
       setDescuento('');
       setRecibido('');
-      alRegistrar(respuesta.ticket);
+      
+      // Si fue online manda el ticket, si fue offline manda null
+      alRegistrar(respuesta.pendiente ? null : respuesta.ticket);
+
     } catch (err) {
+      // Si llega acá, es un error real del backend (ej: falta de stock)
       setErrorEnvio(err.message);
     } finally {
       setEnviando(false);

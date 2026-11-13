@@ -49,3 +49,37 @@ export async function obtener(req, res, next) {
     next(err);
   }
 }
+
+// POST /api/ventas/sincronizar  { ventas: [ {uuid_cliente, ...}, ... ] }
+// Recibe las ventas que se hicieron sin conexión y devuelve qué pasó con CADA una.
+// Una venta rechazada no frena a las demás.
+export async function sincronizar(req, res, next) {
+  try {
+    const { ventas } = req.body ?? {};
+    if (!Array.isArray(ventas) || ventas.length === 0) throw httpError(400, 'No hay ventas para sincronizar');
+    if (ventas.length > 100) throw httpError(400, 'Se pueden sincronizar hasta 100 ventas por vez');
+
+    const resultados = [];
+    // De a una y en orden: el stock se descuenta en el mismo orden en que se vendió.
+    for (const v of ventas) {
+      try {
+        validar(v);
+        const datos = { ...v, items: agruparItems(v.items) };
+        const { id, yaRegistrada } = await Venta.registrar(datos, req.usuario.id);
+        const ticket = await Venta.obtener(id);
+        resultados.push({
+          uuid_cliente: v.uuid_cliente,
+          estado: yaRegistrada ? 'YA_REGISTRADA' : 'REGISTRADA',
+          numero_ticket: ticket.numero_ticket,
+        });
+      } catch (err) {
+        // Los errores de datos o de stock (400, 409...) se informan; los inesperados (500) sí cortan.
+        if (!err.status || err.status >= 500) throw err;
+        resultados.push({ uuid_cliente: v?.uuid_cliente ?? null, estado: 'RECHAZADA', error: err.message });
+      }
+    }
+    res.json({ resultados });
+  } catch (err) {
+    next(err);
+  }
+}
