@@ -9,12 +9,13 @@ export const Producto = {
         return result.rows;
     },
 
-    buscarPorCodigo: async (codigo) => {
-        const result = await pool.query(
-            'SELECT * FROM productos WHERE codigo = $1 AND activo = true',
-            [codigo]
-        );
-        return result.rows[0];
+    async buscarPorCodigo(codigo) {
+    const { rows } = await pool.query(
+        `SELECT codigo, nombre, categoria, precio_mostrador, precio_mesa, stock_actual, controla_stock
+        FROM productos WHERE codigo = $1 AND activo = TRUE`,
+        [codigo]
+    );
+        return rows[0] ?? null;
     },
 
     crear: async (producto) => {
