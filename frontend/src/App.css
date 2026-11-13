@@ -48,6 +48,7 @@
 .modal::backdrop { background: rgba(0, 0, 0, 0.55); }
 .modal-acciones { display: flex; gap: var(--esp-2); justify-content: flex-end; margin-top: var(--esp-4); }
 
+
 /* ---------- Layout ---------- */
 .layout { min-height: 100vh; display: grid; grid-template-columns: 240px 1fr; grid-template-rows: auto 1fr; }
 .layout-cabecera {
