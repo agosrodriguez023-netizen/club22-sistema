@@ -123,6 +123,9 @@
 }
 
 
+/* ---------- Productos y precios ---------- */
+.catalogo-filtros { display: flex; flex-wrap: wrap; gap: var(--esp-3); align-items: flex-end; margin-bottom: var(--esp-3); }
+.catalogo-filtros .campo { margin-bottom: 0; min-width: 200px; }
 /* ---------- Registro de acciones ---------- */
 .auditoria-filtros { display: flex; flex-wrap: wrap; gap: var(--esp-3); align-items: flex-end; margin-bottom: var(--esp-3); }
 .auditoria-filtros .campo { margin-bottom: 0; }

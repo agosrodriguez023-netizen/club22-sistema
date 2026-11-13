@@ -10,6 +10,7 @@ import Venta from './paginas/Venta.jsx';
 import Usuarios from './paginas/Usuarios.jsx';
 import Auditoria from './paginas/Auditoria.jsx';
 import CierreCaja from './paginas/CierreCaja.jsx';
+import Catalogo from './paginas/Catalogo.jsx';
 
 const TODOS = ['ADMINISTRADOR', 'CAJERO', 'SALA', 'INVENTARIO'];
 const CAJA = ['ADMINISTRADOR', 'CAJERO'];
@@ -32,7 +33,7 @@ export default function App() {
           </Route>
 
           <Route element={<RutaProtegida roles={TODOS} />}>
-            <Route path="/catalogo" element={<Pendiente titulo="Productos y precios" />} />
+            <Route path="/catalogo" element={<Catalogo />} />
           </Route>
 
           <Route element={<RutaProtegida roles={['ADMINISTRADOR']} />}>
