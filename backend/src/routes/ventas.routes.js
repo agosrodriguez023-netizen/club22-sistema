@@ -7,6 +7,7 @@ const router = Router();
 router.use(autenticar);
 router.post('/', permitir('CAJERO', 'ADMINISTRADOR'), ventas.crear);
 router.post('/sincronizar', permitir('CAJERO', 'ADMINISTRADOR'), ventas.sincronizar);
+router.get('/', permitir('CAJERO', 'ADMINISTRADOR'), ventas.listar);
 router.get('/:id', permitir('CAJERO', 'ADMINISTRADOR'), ventas.obtener);
 
 export default router;

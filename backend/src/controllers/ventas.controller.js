@@ -83,3 +83,18 @@ export async function sincronizar(req, res, next) {
     next(err);
   }
 }
+
+// GET /api/ventas?desde=...&hasta=...
+// El Cajero ve solo sus ventas; el Administrador ve todas.
+export async function listar(req, res, next) {
+  try {
+    const { desde, hasta } = req.query;
+    if (!desde || !hasta || Number.isNaN(Date.parse(desde)) || Number.isNaN(Date.parse(hasta))) {
+      throw httpError(400, 'Indicá desde y hasta (fecha y hora)');
+    }
+    const usuarioId = req.usuario.rol === 'ADMINISTRADOR' ? null : req.usuario.id;
+    res.json(await Venta.listar({ desde, hasta, usuarioId }));
+  } catch (err) {
+    next(err);
+  }
+}
