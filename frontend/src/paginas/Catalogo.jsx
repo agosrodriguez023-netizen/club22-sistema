@@ -10,7 +10,7 @@ import Modal from '../componentes/Modal.jsx';
 import Tabla from '../componentes/Tabla.jsx';
 import Tarjeta from '../componentes/Tarjeta.jsx';
 
-const FORM_VACIO = { codigo: '', nombre: '', categoria: '', precio_mostrador: '', precio_mesa: '' };
+const FORM_VACIO = { codigo: '', nombre: '', categoria: '', precio_mostrador: '', precio_mesa: '', stock_minimo: '0' };
 
 export default function Catalogo() {
   const { usuario } = useAuth();
@@ -68,6 +68,7 @@ export default function Catalogo() {
       categoria: p.categoria ?? '',
       precio_mostrador: String(Number(p.precio_mostrador)),
       precio_mesa: String(Number(p.precio_mesa)),
+      stock_minimo: String(Number(p.stock_minimo ?? 0)),
     });
     setErrorForm('');
     setAbierto(true);
@@ -80,18 +81,20 @@ export default function Catalogo() {
     setErrorForm('');
     const mostrador = Number(form.precio_mostrador);
     const mesa = Number(form.precio_mesa);
+    const minimo = Number(form.stock_minimo);
     if (!editando && !form.codigo.trim()) return setErrorForm('Ingresá el código del producto.');
     if (!form.nombre.trim()) return setErrorForm('Ingresá el nombre del producto.');
     if (form.precio_mostrador === '' || !Number.isFinite(mostrador) || mostrador < 0) return setErrorForm('El precio de mostrador tiene que ser un número de 0 o más.');
     if (form.precio_mesa === '' || !Number.isFinite(mesa) || mesa < 0) return setErrorForm('El precio de mesa tiene que ser un número de 0 o más.');
+    if (form.stock_minimo === '' || !Number.isInteger(minimo) || minimo < 0) return setErrorForm('El stock mínimo tiene que ser un número entero de 0 o más.');
 
     setGuardando(true);
     try {
       if (editando) {
-        // 1) datos del producto
+        // 1) datos del producto (incluye el stock mínimo)
         await pedir(`/productos/${encodeURIComponent(editando.codigo)}`, {
           method: 'PUT',
-          body: { nombre: form.nombre.trim(), categoria: form.categoria.trim() || null },
+          body: { nombre: form.nombre.trim(), categoria: form.categoria.trim() || null, stock_minimo: minimo },
         });
         // 2) precios: solo si cambiaron (el backend deja el registro de quién y cuándo)
         if (mostrador !== Number(editando.precio_mostrador) || mesa !== Number(editando.precio_mesa)) {
@@ -110,6 +113,7 @@ export default function Catalogo() {
             categoria: form.categoria.trim() || null,
             precio_mostrador: mostrador,
             precio_mesa: mesa,
+            stock_minimo: minimo,
           },
         });
         setAviso({ tipo: 'exito', texto: `Producto ${form.nombre.trim()} creado.` });
@@ -136,13 +140,20 @@ export default function Catalogo() {
     }
   }
 
+  const bajoMinimo = (p) => p.controla_stock !== false && Number(p.stock_minimo) > 0 && Number(p.stock_actual) <= Number(p.stock_minimo);
+
   const columnas = [
     { clave: 'codigo', titulo: 'Código' },
     { clave: 'nombre', titulo: 'Producto' },
     { clave: 'categoria', titulo: 'Categoría', render: (p) => p.categoria ?? '—' },
     { clave: 'precio_mostrador', titulo: 'Mostrador', render: (p) => dinero(Number(p.precio_mostrador)) },
     { clave: 'precio_mesa', titulo: 'Mesa', render: (p) => dinero(Number(p.precio_mesa)) },
-    { clave: 'stock_actual', titulo: 'Stock', render: (p) => (p.controla_stock === false ? 'No controla' : p.stock_actual) },
+    {
+      clave: 'stock_actual',
+      titulo: 'Stock',
+      render: (p) => (p.controla_stock === false ? 'No controla' : bajoMinimo(p) ? `${p.stock_actual} (bajo)` : p.stock_actual),
+    },
+    { clave: 'stock_minimo', titulo: 'Mínimo', render: (p) => (p.controla_stock === false ? '—' : Number(p.stock_minimo ?? 0)) },
   ];
   if (esAdmin) {
     columnas.push({
@@ -196,6 +207,15 @@ export default function Catalogo() {
           </datalist>
           <Campo etiqueta="Precio de mostrador ($)" type="number" min="0" value={form.precio_mostrador} onChange={cambiar('precio_mostrador')} />
           <Campo etiqueta="Precio de mesa ($)" type="number" min="0" value={form.precio_mesa} onChange={cambiar('precio_mesa')} />
+          <Campo
+            etiqueta="Stock mínimo (unidades)"
+            ayuda="Cuando el stock llega a este número, el producto aparece en las alertas del Inicio. 0 = sin alerta."
+            type="number"
+            min="0"
+            step="1"
+            value={form.stock_minimo}
+            onChange={cambiar('stock_minimo')}
+          />
           <div className="modal-acciones">
             <Boton type="button" variante="secundario" onClick={() => setAbierto(false)}>Cancelar</Boton>
             <Boton type="submit" cargando={guardando} textoCargando="Guardando…">Guardar</Boton>
