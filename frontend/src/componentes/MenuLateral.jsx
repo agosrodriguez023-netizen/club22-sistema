@@ -12,6 +12,8 @@ export const SECCIONES = [
   { ruta: '/stock', texto: 'Stock', roles: ['ADMINISTRADOR', 'INVENTARIO'] },
   { ruta: '/proveedores', texto: 'Proveedores', roles: ['ADMINISTRADOR', 'INVENTARIO'] },
   { ruta: '/pedidos', texto: 'Pedidos', roles: ['ADMINISTRADOR', 'INVENTARIO'] },
+  { ruta: '/mesas', texto: 'Mesas', roles: ['ADMINISTRADOR', 'SALA'] },
+  { ruta: '/reservas', texto: 'Reservas', roles: ['ADMINISTRADOR', 'SALA'] },
   { ruta: '/admin/usuarios', texto: 'Usuarios', roles: ['ADMINISTRADOR'] },
   { ruta: '/admin/auditoria', texto: 'Registro de acciones', roles: ['ADMINISTRADOR'] },
   { ruta: '/componentes', texto: 'Componentes', roles: ['ADMINISTRADOR', 'CAJERO', 'SALA', 'INVENTARIO'] },

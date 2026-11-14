@@ -16,10 +16,13 @@ import Pendientes from './paginas/Pendientes.jsx';
 import Proveedores from './paginas/Proveedores.jsx';
 import Pedidos from './paginas/Pedidos.jsx';
 import Stock from './paginas/Stock.jsx';
+import Mesas from './paginas/Mesas.jsx';
+import Reservas from './paginas/Reservas.jsx';
 
 const TODOS = ['ADMINISTRADOR', 'CAJERO', 'SALA', 'INVENTARIO'];
 const CAJA = ['ADMINISTRADOR', 'CAJERO'];
 const STOCK = ['ADMINISTRADOR', 'INVENTARIO'];
+const SALON = ['ADMINISTRADOR', 'SALA'];
 
 export default function App() {
   return (
@@ -47,6 +50,11 @@ export default function App() {
             <Route path="/stock" element={<Stock />} />
             <Route path="/proveedores" element={<Proveedores />} />
             <Route path="/pedidos" element={<Pedidos />} />
+          </Route>
+
+          <Route element={<RutaProtegida roles={SALON} />}>
+            <Route path="/mesas" element={<Mesas />} />
+            <Route path="/reservas" element={<Reservas />} />
           </Route>
 
           <Route element={<RutaProtegida roles={['ADMINISTRADOR']} />}>
