@@ -18,6 +18,8 @@ import Pedidos from './paginas/Pedidos.jsx';
 import Stock from './paginas/Stock.jsx';
 import Mesas from './paginas/Mesas.jsx';
 import Reservas from './paginas/Reservas.jsx';
+import Promociones from './paginas/Promociones.jsx';
+import Reportes from './paginas/Reportes.jsx';
 
 const TODOS = ['ADMINISTRADOR', 'CAJERO', 'SALA', 'INVENTARIO'];
 const CAJA = ['ADMINISTRADOR', 'CAJERO'];
@@ -58,6 +60,8 @@ export default function App() {
           </Route>
 
           <Route element={<RutaProtegida roles={['ADMINISTRADOR']} />}>
+            <Route path="/promociones" element={<Promociones />} />
+            <Route path="/reportes" element={<Reportes />} />
             <Route path="/admin/usuarios" element={<Usuarios />} />
             <Route path="/admin/auditoria" element={<Auditoria />} />
           </Route>
