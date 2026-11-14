@@ -15,6 +15,7 @@ import MisVentas from './paginas/MisVentas.jsx';
 import Pendientes from './paginas/Pendientes.jsx';
 import Proveedores from './paginas/Proveedores.jsx';
 import Pedidos from './paginas/Pedidos.jsx';
+import Stock from './paginas/Stock.jsx';
 
 const TODOS = ['ADMINISTRADOR', 'CAJERO', 'SALA', 'INVENTARIO'];
 const CAJA = ['ADMINISTRADOR', 'CAJERO'];
@@ -43,6 +44,7 @@ export default function App() {
           </Route>
 
           <Route element={<RutaProtegida roles={STOCK} />}>
+            <Route path="/stock" element={<Stock />} />
             <Route path="/proveedores" element={<Proveedores />} />
             <Route path="/pedidos" element={<Pedidos />} />
           </Route>
