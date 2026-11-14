@@ -13,9 +13,11 @@ import CierreCaja from './paginas/CierreCaja.jsx';
 import Catalogo from './paginas/Catalogo.jsx';
 import MisVentas from './paginas/MisVentas.jsx';
 import Pendientes from './paginas/Pendientes.jsx';
+import Proveedores from './paginas/Proveedores.jsx';
 
 const TODOS = ['ADMINISTRADOR', 'CAJERO', 'SALA', 'INVENTARIO'];
 const CAJA = ['ADMINISTRADOR', 'CAJERO'];
+const STOCK = ['ADMINISTRADOR', 'INVENTARIO'];
 
 export default function App() {
   return (
@@ -37,6 +39,10 @@ export default function App() {
 
           <Route element={<RutaProtegida roles={TODOS} />}>
             <Route path="/catalogo" element={<Catalogo />} />
+          </Route>
+
+          <Route element={<RutaProtegida roles={STOCK} />}>
+            <Route path="/proveedores" element={<Proveedores />} />
           </Route>
 
           <Route element={<RutaProtegida roles={['ADMINISTRADOR']} />}>
