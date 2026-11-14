@@ -9,6 +9,7 @@ export const SECCIONES = [
   { ruta: '/pendientes', texto: 'Ventas pendientes', roles: ['ADMINISTRADOR', 'CAJERO'] },
   { ruta: '/caja/cierre', texto: 'Cierre de caja', roles: ['ADMINISTRADOR', 'CAJERO'] },
   { ruta: '/catalogo', texto: 'Productos y precios', roles: ['ADMINISTRADOR', 'CAJERO', 'SALA', 'INVENTARIO'] },
+  { ruta: '/proveedores', texto: 'Proveedores', roles: ['ADMINISTRADOR', 'INVENTARIO'] },
   { ruta: '/admin/usuarios', texto: 'Usuarios', roles: ['ADMINISTRADOR'] },
   { ruta: '/admin/auditoria', texto: 'Registro de acciones', roles: ['ADMINISTRADOR'] },
   { ruta: '/componentes', texto: 'Componentes', roles: ['ADMINISTRADOR', 'CAJERO', 'SALA', 'INVENTARIO'] },
