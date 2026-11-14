@@ -14,6 +14,8 @@ export const SECCIONES = [
   { ruta: '/pedidos', texto: 'Pedidos', roles: ['ADMINISTRADOR', 'INVENTARIO'] },
   { ruta: '/mesas', texto: 'Mesas', roles: ['ADMINISTRADOR', 'SALA'] },
   { ruta: '/reservas', texto: 'Reservas', roles: ['ADMINISTRADOR', 'SALA'] },
+  { ruta: '/promociones', texto: 'Promociones', roles: ['ADMINISTRADOR'] },
+  { ruta: '/reportes', texto: 'Reportes', roles: ['ADMINISTRADOR'] },
   { ruta: '/admin/usuarios', texto: 'Usuarios', roles: ['ADMINISTRADOR'] },
   { ruta: '/admin/auditoria', texto: 'Registro de acciones', roles: ['ADMINISTRADOR'] },
   { ruta: '/componentes', texto: 'Componentes', roles: ['ADMINISTRADOR', 'CAJERO', 'SALA', 'INVENTARIO'] },
